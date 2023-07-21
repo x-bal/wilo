@@ -15,10 +15,11 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         User::create([
-            'username' => 'developer',
+            'email' => 'dev@wilo.com',
             'password' => bcrypt('secret'),
             'name' => 'Developer'
         ]);
+
         // \App\Models\User::factory(500)->create();
     }
 }

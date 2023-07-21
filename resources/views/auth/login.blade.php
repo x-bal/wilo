@@ -22,69 +22,49 @@
     </div>
     <!-- END #loader -->
 
+
     <!-- BEGIN #app -->
     <div id="app" class="app">
         <!-- BEGIN login -->
-        <div class="login login-with-news-feed">
-            <!-- BEGIN news-feed -->
-            <div class="news-feed">
-                <div class="news-image" style="background-image: url({{ asset('/') }}img/login-bg/login-bg-11.jpg)"></div>
-                <div class="news-caption">
-                    <h4 class="caption-title"><b>Faceid</b> App</h4>
-                    <p>
-                        Download the Color Admin app for iPhone®, iPad®, and Android™. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                    </p>
-                </div>
+        <div class="login login-v2 fw-bold">
+            <!-- BEGIN login-cover -->
+            <div class="login-cover">
+                <div class="login-cover-img" style="background-image: url({{ asset('/') }}img/login-bg/login-bg-17.jpg)" data-id="login-cover-image"></div>
+                <div class="login-cover-bg"></div>
             </div>
-            <!-- END news-feed -->
+            <!-- END login-cover -->
 
             <!-- BEGIN login-container -->
             <div class="login-container">
                 <!-- BEGIN login-header -->
-                <div class="login-header mb-30px">
-                    <div class="brand">
-                        <div class="d-flex align-items-center">
-                            <span class="logo"><i class="ion-ios-cloud"></i></span>
-
-
-                            <b>Faceid</b> App
-                        </div>
-                        <small>Login dengan akun anda.</small>
-                    </div>
-                    <div class="icon">
-                        <i class="fa fa-sign-in-alt"></i>
-                    </div>
+                <div class="login-header">
+                    <img src="{{ asset('/') }}img/logo/wilo.png" alt="" class="logo" width="200" style="margin-left: 75px !important;">
                 </div>
                 <!-- END login-header -->
 
                 <!-- BEGIN login-content -->
                 <div class="login-content">
-                    <form action="{{ route('login') }}" method="POST" class="fs-13px">
+                    <form action="{{ route('login') }}" method="POST">
                         @csrf
-                        <div class="form-floating mb-15px">
-                            <input type="text" class="form-control h-45px fs-13px" placeholder="Username" id="username" name="username" />
-                            <label for="username" class="d-flex align-items-center fs-13px text-gray-600">Username</label>
 
-                            @error('username')
-                            <small class="text-danger">{{ $message }}</small>
+                        <div class="form-floating mb-20px">
+                            <input type="email" class="form-control fs-13px h-45px border-0" placeholder="Email Address" id="emailAddress" name="email" />
+                            <label for="emailAddress" class="d-flex align-items-center text-gray-600 fs-13px">Email Address</label>
+
+                            @error('email')
+                            <span class="text-danger">{{ $message }}</span>
                             @enderror
                         </div>
-
-                        <div class="form-floating mb-15px">
-                            <input type="password" class="form-control h-45px fs-13px" placeholder="Password" id="password" name="password" />
-                            <label for="password" class="d-flex align-items-center fs-13px text-gray-600">Password</label>
+                        <div class="form-floating mb-20px">
+                            <input type="password" class="form-control fs-13px h-45px border-0" placeholder="Password" name="password" />
+                            <label for="password" class="d-flex align-items-center text-gray-600 fs-13px">Password</label>
 
                             @error('password')
-                            <small class="text-danger">{{ $message }}</small>
+                            <span class="text-danger">{{ $message }}</span>
                             @enderror
                         </div>
-
-                        <div class="mb-15px">
-                            <button type="submit" class="btn btn-success d-block h-45px w-100 btn-lg fs-14px">Sign me in</button>
-                        </div>
-                        <hr class="bg-gray-600 opacity-2" />
-                        <div class="text-gray-600 text-center text-gray-500-darker mb-0">
-                            &copy; Faceid App All Right Reserved 2023
+                        <div class="mb-20px">
+                            <button type="submit" class="btn btn-success d-block w-100 h-45px btn-lg">Login</button>
                         </div>
                     </form>
                 </div>
@@ -93,6 +73,14 @@
             <!-- END login-container -->
         </div>
         <!-- END login -->
+
+        <!-- BEGIN login-bg -->
+        <div class="login-bg-list clearfix">
+            <div class="login-bg-list-item active">
+                <a href="javascript:;" class="login-bg-list-link" data-toggle="login-change-bg" data-img="{{ asset('/') }}img/login-bg/login-bg-17.jpg" style="background-image: url({{ asset('/') }}img/login-bg/login-bg-17.jpg)"></a>
+            </div>
+        </div>
+        <!-- END login-bg -->
 
         <!-- BEGIN scroll-top-btn -->
         <a href="javascript:;" class="btn btn-icon btn-circle btn-primary btn-scroll-to-top" data-toggle="scroll-to-top"><i class="fa fa-angle-up"></i></a>
@@ -105,6 +93,10 @@
     <script src="{{ asset('/') }}js/app.min.js"></script>
     <script src="{{ asset('/') }}js/theme/apple.min.js"></script>
     <!-- ================== END core-js ================== -->
+
+    <!-- ================== BEGIN page-js ================== -->
+    <script src="{{ asset('/') }}js/demo/login-v2.demo.js"></script>
+    <!-- ================== END page-js ================== -->
 </body>
 
 </html>
