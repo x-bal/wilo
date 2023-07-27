@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCompaniesTable extends Migration
+class CreateServersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,14 @@ class CreateCompaniesTable extends Migration
      */
     public function up()
     {
-        Schema::create('companies', function (Blueprint $table) {
+        Schema::create('servers', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('logo')->nullable();
-            $table->text('address')->nullable();
+            $table->string('host');
+            $table->string('port');
+            $table->string('client_id')->nullable();
+            $table->string('username')->nullable();
+            $table->string('password')->nullable();
+            $table->integer('status')->default(0);
             $table->timestamps();
         });
     }
@@ -29,6 +32,6 @@ class CreateCompaniesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('companies');
+        Schema::dropIfExists('servers');
     }
 }

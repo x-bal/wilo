@@ -24,7 +24,7 @@ class CreateModbusesTable extends Migration
             $table->string('math')->default('x,');
             $table->string('after')->nullable();
             $table->string('satuan')->nullable();
-            $table->integer('is_used')->default(0);
+            $table->integer('is_used')->default(1);
             $table->integer('is_showed')->default(0);
             $table->timestamps();
         });

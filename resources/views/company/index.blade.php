@@ -27,15 +27,16 @@
     <!-- END panel-heading -->
     <!-- BEGIN panel-body -->
     <div class="panel-body">
-        <a href="#modal-dialog" id="btn-add" class="btn btn-primary mb-3" data-route="{{ route('users.store') }}" data-bs-toggle="modal"><i class="ion-ios-add"></i> Add User</a>
+        <a href="#modal-dialog" id="btn-add" class="btn btn-primary mb-3" data-route="{{ route('companies.store') }}" data-bs-toggle="modal"><i class="ion-ios-add"></i> Add Company</a>
 
         <table id="datatable" class="table table-striped table-bordered align-middle">
             <thead>
                 <tr>
                     <th class="text-nowrap">No</th>
-                    <th class="text-nowrap">Foto</th>
-                    <th class="text-nowrap">Email</th>
+                    <th class="text-nowrap">Logo</th>
                     <th class="text-nowrap">Name</th>
+                    <th class="text-nowrap">Address</th>
+                    <th class="text-nowrap">Total Device</th>
                     <th class="text-nowrap">Action</th>
                 </tr>
             </thead>
@@ -56,15 +57,6 @@
 
                 <div class="modal-body">
                     <div class="form-group mb-3">
-                        <label for="email">Email</label>
-                        <input type="email" name="email" id="email" class="form-control" value="">
-
-                        @error('email')
-                        <small class="text-danger">{{ $message }}</small>
-                        @enderror
-                    </div>
-
-                    <div class="form-group mb-3">
                         <label for="name">Nama</label>
                         <input type="text" name="name" id="name" class="form-control" value="">
 
@@ -74,19 +66,19 @@
                     </div>
 
                     <div class="form-group mb-3">
-                        <label for="password">Password</label>
-                        <input type="password" name="password" id="password" class="form-control" value="">
+                        <label for="address">Address</label>
+                        <textarea name="address" id="address" rows="3" class="form-control"></textarea>
 
-                        @error('password')
+                        @error('address')
                         <small class="text-danger">{{ $message }}</small>
                         @enderror
                     </div>
 
                     <div class="form-group mb-3">
-                        <label for="foto">Foto</label>
-                        <input type="file" name="foto" id="foto" class="form-control" value="">
+                        <label for="logo">Logo</label>
+                        <input type="file" name="logo" id="logo" class="form-control" value="">
 
-                        @error('foto')
+                        @error('logo')
                         <small class="text-danger">{{ $message }}</small>
                         @enderror
                     </div>
@@ -115,7 +107,7 @@
         processing: true,
         serverSide: true,
         responsive: true,
-        ajax: "{{ route('users.list') }}",
+        ajax: "{{ route('companies.list') }}",
         deferRender: true,
         pagination: true,
         columns: [{
@@ -123,16 +115,20 @@
                 name: 'DT_RowIndex'
             },
             {
-                data: 'foto',
-                name: 'foto'
-            },
-            {
-                data: 'email',
-                name: 'email'
+                data: 'logo',
+                name: 'logo'
             },
             {
                 data: 'name',
                 name: 'name'
+            },
+            {
+                data: 'address',
+                name: 'address'
+            },
+            {
+                data: 'total',
+                name: 'total'
             },
             {
                 data: 'action',
@@ -145,7 +141,7 @@
         let route = $(this).attr('data-route')
         $("#form-user").append(`<input type="hidden" name="_method" value="POST">`);
         $("#form-user").attr('action', route)
-        $("#email").val("")
+        $("#address").val("")
         $("#name").val("")
     })
 
@@ -161,14 +157,14 @@
         $("#form-user").append(`<input type="hidden" name="_method" value="PUT">`);
 
         $.ajax({
-            url: "/users/" + id,
+            url: "/companies/" + id,
             type: 'GET',
             method: 'GET',
             success: function(response) {
-                let user = response.user;
+                let company = response.company;
 
-                $("#email").val(user.email)
-                $("#name").val(user.name)
+                $("#address").val(company.address)
+                $("#name").val(company.name)
             }
         })
     })
@@ -179,8 +175,8 @@
         $("#form-delete").attr('action', route)
 
         swal({
-            title: 'Hapus data user?',
-            text: 'Menghapus user bersifat permanen.',
+            title: 'Hapus data company?',
+            text: 'Menghapus company bersifat permanen.',
             icon: 'error',
             buttons: {
                 cancel: {

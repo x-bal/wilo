@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateDigitalInputsTable extends Migration
+class CreateHistoriesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,14 @@ class CreateDigitalInputsTable extends Migration
      */
     public function up()
     {
-        Schema::create('digital_inputs', function (Blueprint $table) {
+        Schema::create('histories', function (Blueprint $table) {
             $table->id();
             $table->foreignId('device_id')->constrained('devices')->cascadeOnDelete()->cascadeOnUpdate();
-            $table->string('name');
-            $table->string('digital_input');
-            $table->string('yes')->default(1);
-            $table->string('no')->default(0);
-            $table->integer('is_used')->default(1);
-            $table->integer('val')->default(0);
+            $table->foreignId('modbus_id')->default(0);
+            $table->foreignId('digital_input_id')->default(0);
+            $table->string('ket');
+            $table->string('val');
+            $table->string('time');
             $table->timestamps();
         });
     }
@@ -33,6 +32,6 @@ class CreateDigitalInputsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('digital_inputs');
+        Schema::dropIfExists('histories');
     }
 }

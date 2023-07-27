@@ -29,7 +29,9 @@
     <div id="app" class="app app-header-fixed app-sidebar-fixed">
         <div id="header" class="app-header">
             <div class="navbar-header">
-                <a href="index.html" class="navbar-brand"><span class="navbar-logo"><i class="ion-ios-browsers"></i></span> <b class="me-1">{{ config('app.name') }}</b></a>
+                <a href="{{ route('dashboard') }}" class="navbar-brand">
+                    <img src="{{ asset('/') }}img/logo/wilo.png" alt="">
+                </a>
                 <button type="button" class="navbar-mobile-toggler" data-toggle="app-sidebar-mobile">
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
@@ -105,6 +107,15 @@
                     </div>
 
                     <div class="menu-header">Navigation</div>
+                    <div class="menu-item">
+                        <a href="{{ route('dashboard') }}" class="menu-link">
+                            <div class="menu-icon">
+                                <i class="fas fa-home bg-blue"></i>
+                            </div>
+                            <div class="menu-text">Dashboard</div>
+                        </a>
+                    </div>
+
                     <div class="menu-item has-sub active">
                         <a href="javascript:;" class="menu-link">
                             <div class="menu-icon">
@@ -117,6 +128,18 @@
                             <div class="menu-item">
                                 <a href="{{ route('users.index') }}" class="menu-link">
                                     <div class="menu-text">Data User</div>
+                                </a>
+                            </div>
+
+                            <div class="menu-item">
+                                <a href="{{ route('companies.index') }}" class="menu-link">
+                                    <div class="menu-text">Data Company</div>
+                                </a>
+                            </div>
+
+                            <div class="menu-item">
+                                <a href="{{ route('devices.index') }}" class="menu-link">
+                                    <div class="menu-text">Data Device</div>
                                 </a>
                             </div>
                         </div>

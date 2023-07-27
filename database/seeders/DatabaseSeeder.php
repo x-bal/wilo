@@ -20,6 +20,8 @@ class DatabaseSeeder extends Seeder
             'name' => 'Developer'
         ]);
 
+        $this->call(ServerMqttSeeder::class);
+
         // \App\Models\User::factory(500)->create();
     }
 }

@@ -4,80 +4,86 @@ namespace App\Http\Controllers;
 
 use App\Models\DigitalInput;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class DigitalInputController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
         //
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         //
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         //
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\DigitalInput  $digitalInput
-     * @return \Illuminate\Http\Response
-     */
     public function show(DigitalInput $digitalInput)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\DigitalInput  $digitalInput
-     * @return \Illuminate\Http\Response
-     */
     public function edit(DigitalInput $digitalInput)
     {
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\DigitalInput  $digitalInput
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, DigitalInput $digitalInput)
+    public function update(Request $request)
     {
-        //
+        request()->validate([
+            'id' => 'required',
+            'field' => 'required',
+            'val' => 'required',
+        ]);
+
+        try {
+            DB::beginTransaction();
+
+            $digital = DigitalInput::findOrFail(request('id'));
+            $digital->update([
+                request('field') => request('val')
+            ]);
+
+            DB::commit();
+
+            if (request('field') == 'name') {
+                $message = 'Digital input name successfully updated';
+            }
+
+            if (request('field') == 'yes') {
+                $message = 'Digital input alias (yes) successfully updated';
+            }
+
+            if (request('field') == 'no') {
+                $message = 'Digital input alias (no) successfully updated';
+            }
+
+            if (request('field') == 'is_used' && request('val') == 1) {
+                $message = 'Digital Input successfully activated';
+            }
+
+            if (request('field') == 'is_used' && request('val') == 0) {
+                $message = 'Digital Input successfully deactivated';
+            }
+
+            return response()->json([
+                'status' => 'success',
+                'message' => $message
+            ]);
+        } catch (\Throwable $th) {
+            DB::commit();
+            return response()->json([
+                'status' => 'failed',
+                'message' => $th->getMessage()
+            ]);
+        }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\DigitalInput  $digitalInput
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(DigitalInput $digitalInput)
     {
         //

@@ -28,6 +28,7 @@ class CreateDevicesTable extends Migration
             $table->string('digital')->nullable();
             $table->string('modbus')->nullable();
             $table->string('image')->nullable();
+            $table->string('topic')->nullable();
             $table->integer('is_active')->default(1);
             $table->timestamps();
         });

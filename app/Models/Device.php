@@ -24,4 +24,9 @@ class Device extends Model
     {
         return $this->hasMany(DigitalInput::class);
     }
+
+    function merges()
+    {
+        return $this->hasMany(Merge::class);
+    }
 }

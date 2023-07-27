@@ -79,7 +79,6 @@ class UserController extends Controller
         $request->validate([
             'email' => 'required|unique:users,email,' . $user->id,
             'name' => 'required|string',
-            'password' => 'nullable|string|min:6',
         ]);
 
         try {

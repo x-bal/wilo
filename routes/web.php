@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DeviceController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -23,8 +25,17 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::middleware('auth')->group(function () {
-    Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-    Route::get('users/get', [UserController::class, 'get'])->name('users.list');
+    Route::get('/users/get', [UserController::class, 'get'])->name('users.list');
     Route::resource('users', UserController::class);
+
+    Route::get('/companies/get', [CompanyController::class, 'get'])->name('companies.list');
+    Route::get('/companies/device', [DeviceController::class, 'index'])->name('companies.device');
+    Route::resource('companies', CompanyController::class);
+
+    Route::get('/devices/get', [DeviceController::class, 'get'])->name('devices.get');
+    Route::get('/devices/list', [DeviceController::class, 'list'])->name('devices.list');
+    Route::get('/devices/{device:id}/detail', [DeviceController::class, 'detail'])->name('devices.detail');
+    Route::resource('devices', DeviceController::class);
 });
