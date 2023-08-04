@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Company;
 use Illuminate\Http\Request;
 
 class DashboardController extends Controller
@@ -10,7 +11,8 @@ class DashboardController extends Controller
     {
         $title = 'Dashboard';
         $breadcrumbs = ['Dashboard'];
+        $companies = Company::get();
 
-        return view('dashboard.index', compact('title', 'breadcrumbs'));
+        return view('dashboard.index', compact('title', 'breadcrumbs', 'companies'));
     }
 }

@@ -3,6 +3,7 @@
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DeviceController;
+use App\Http\Controllers\ServerController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -37,5 +38,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/devices/get', [DeviceController::class, 'get'])->name('devices.get');
     Route::get('/devices/list', [DeviceController::class, 'list'])->name('devices.list');
     Route::get('/devices/{device:id}/detail', [DeviceController::class, 'detail'])->name('devices.detail');
+    Route::get('/devices/{device:id}/performance', [DeviceController::class, 'grafik'])->name('devices.grafik');
     Route::resource('devices', DeviceController::class);
+
+    Route::resource('server', ServerController::class);
 });

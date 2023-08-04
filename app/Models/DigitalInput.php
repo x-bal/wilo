@@ -14,4 +14,9 @@ class DigitalInput extends Model
     {
         return $this->belongsTo(Device::class);
     }
+
+    function histories()
+    {
+        return $this->hasMany(History::class);
+    }
 }

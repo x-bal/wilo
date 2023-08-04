@@ -85,28 +85,28 @@ function update(id, field, val, url) {
         success: function (response) {
             console.log(response)
             if (response.status == 'success') {
-                iziToast.success({
-                    title: 'Success',
-                    position: 'topRight',
-                    message: response.message,
-                });
+                // iziToast.success({
+                //     title: 'Success',
+                //     position: 'topRight',
+                //     message: response.message,
+                // });
             } else {
-                iziToast.error({
-                    title: 'Error',
-                    position: 'topRight',
-                    message: response.message,
-                });
+                // iziToast.error({
+                //     title: 'Error',
+                //     position: 'topRight',
+                //     message: response.message,
+                // });
             }
         },
         error: function (response) {
             console.log(response)
             let message = response.responseJSON.message;
 
-            iziToast.error({
-                title: 'Error',
-                position: 'topRight',
-                message: message,
-            });
+            // iziToast.error({
+            //     title: 'Error',
+            //     position: 'topRight',
+            //     message: message,
+            // });
         }
     })
 }
@@ -185,17 +185,17 @@ $(".table").on('change', '.modbus-math', function () {
         },
         success: function (response) {
             if (response.status == 'success') {
-                iziToast.success({
-                    title: 'Success',
-                    position: 'topRight',
-                    message: response.message,
-                });
+                // iziToast.success({
+                //     title: 'Success',
+                //     position: 'topRight',
+                //     message: response.message,
+                // });
             } else {
-                iziToast.error({
-                    title: 'Error',
-                    position: 'topRight',
-                    message: response.message,
-                });
+                // iziToast.error({
+                //     title: 'Error',
+                //     position: 'topRight',
+                //     message: response.message,
+                // });
             }
         }
     })
@@ -225,27 +225,27 @@ $(".table").on('click', '.device-active', function () {
             if (response.status == 'success') {
                 $(".label-" + id).empty().append(status)
 
-                iziToast.success({
-                    title: 'Success',
-                    position: 'topRight',
-                    message: response.message,
-                });
+                // iziToast.success({
+                //     title: 'Success',
+                //     position: 'topRight',
+                //     message: response.message,
+                // });
             } else {
-                iziToast.error({
-                    title: 'Error',
-                    position: 'topRight',
-                    message: response.message,
-                });
+                // iziToast.error({
+                //     title: 'Error',
+                //     position: 'topRight',
+                //     message: response.message,
+                // });
             }
         },
         error: function (response) {
             let message = response.responseJSON.message;
 
-            iziToast.error({
-                title: 'Error',
-                position: 'topRight',
-                message: message,
-            });
+            // iziToast.error({
+            //     title: 'Error',
+            //     position: 'topRight',
+            //     message: message,
+            // });
         }
     });
 })
@@ -277,27 +277,27 @@ $(".table-merge").on('change', '.merge-type', function () {
             if (response.status == 'success') {
                 $("#merge-val-" + id).empty().append(response.val)
 
-                iziToast.success({
-                    title: 'Success',
-                    position: 'topRight',
-                    message: response.message,
-                });
+                // iziToast.success({
+                //     title: 'Success',
+                //     position: 'topRight',
+                //     message: response.message,
+                // });
             } else {
-                iziToast.error({
-                    title: 'Error',
-                    position: 'topRight',
-                    message: response.message,
-                });
+                // iziToast.error({
+                //     title: 'Error',
+                //     position: 'topRight',
+                //     message: response.message,
+                // });
             }
         },
         error: function (response) {
             let message = response.responseJSON.message;
 
-            iziToast.error({
-                title: 'Error',
-                position: 'topRight',
-                message: message,
-            });
+            // iziToast.error({
+            //     title: 'Error',
+            //     position: 'topRight',
+            //     message: message,
+            // });
         }
     })
 })
@@ -381,17 +381,17 @@ $(".table-merge").on('change', '.merge-math', function () {
             console.log(response)
 
             if (response.status == 'success') {
-                iziToast.success({
-                    title: 'Success',
-                    position: 'topRight',
-                    message: response.message,
-                });
+                // iziToast.success({
+                //     title: 'Success',
+                //     position: 'topRight',
+                //     message: response.message,
+                // });
             } else {
-                iziToast.error({
-                    title: 'Error',
-                    position: 'topRight',
-                    message: response.message,
-                });
+                // iziToast.error({
+                //     title: 'Error',
+                //     position: 'topRight',
+                //     message: response.message,
+                // });
             }
         }
     })

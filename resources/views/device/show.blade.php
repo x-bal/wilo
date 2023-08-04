@@ -46,13 +46,13 @@
             </div>
         </div>
 
-        <div class="card" style="min-width: 12rem; max-width: 15rem; position: absolute; z-index: 1; margin-top: 5px; margin-left: 750px;">
+        <div class="card" style="min-width: 12rem; max-width: 15rem; position: absolute; z-index: 1; margin-top: 10px; margin-left: 750px;">
             <div class="card-body text-center" id="modbus">
 
             </div>
         </div>
 
-        <div class="card" style="min-width: 12rem; max-width: 15rem; position: absolute; z-index: 1; margin-top: 280px; margin-left: 750px;">
+        <div class="card" style="min-width: 12rem; max-width: 15rem; position: absolute; z-index: 1; margin-top: 280px; margin-left: 415px;">
             <div class="card-body text-center" id="digital">
 
             </div>
@@ -457,8 +457,5 @@
     }
 
     window.initMap = initMap;
-</script>
-<script>
-
 </script>
 @endpush

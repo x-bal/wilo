@@ -146,11 +146,11 @@
                     </div>
 
                     <div class="menu-item">
-                        <a href="widget.html" class="menu-link">
+                        <a href="{{ route('server.index') }}" class="menu-link">
                             <div class="menu-icon">
-                                <i class="ion-ios-nutrition bg-blue"></i>
+                                <i class="fas fa-cog bg-secondary"></i>
                             </div>
-                            <div class="menu-text">Widgets <span class="menu-label">NEW</span></div>
+                            <div class="menu-text">Server</div>
                         </a>
                     </div>
 

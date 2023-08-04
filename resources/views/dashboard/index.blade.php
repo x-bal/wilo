@@ -24,8 +24,8 @@
 
     <div class="col-md-12 mt-3">
         <div class="card">
-            <div class="card-body">
-                <h4 class="text-center">Install-Based Population</h4>
+            <div class="card-body text-center">
+                <h4>Install-Based Population</h4>
 
                 <div class="table-responsive">
                     <table class="table table-bordered">
@@ -42,12 +42,26 @@
                         </thead>
 
                         <tbody>
-
+                            @foreach($companies as $company)
+                            <tr>
+                                <td>{{ $loop->iteration }}</td>
+                                <td>
+                                    <a href="{{ route('companies.device', $company->id) }}">
+                                        <img src="{{ asset('/storage/' . $company->logo) }}" alt="" class="img-fluid" width="100">
+                                    </a>
+                                </td>
+                                <td>{{ $company->name }}</td>
+                                <td class="text-center">{{ $company->devices()->count() }}</td>
+                                <td class="text-center">{{ $company->devices()->where('is_active',1)->count() }}</td>
+                                <td class="text-center">{{ $company->devices()->where('is_active',0)->count() }}</td>
+                                <td></td>
+                            </tr>
+                            @endforeach
                         </tbody>
                     </table>
                 </div>
 
-                <a href="" class="btn btn-success text-center">Click for more</a>
+                <a href="{{ route('companies.index') }}" class="btn btn-success">Click for more</a>
             </div>
         </div>
     </div>

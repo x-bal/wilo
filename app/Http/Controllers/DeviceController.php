@@ -4,7 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Company;
 use App\Models\Device;
+use App\Models\DigitalInput;
+use App\Models\History;
 use App\Models\Merge;
+use App\Models\Modbus;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -43,16 +47,26 @@ class DeviceController extends Controller
                     return '<img src="' . asset('/storage/' . $row->image) . '" class="rounded-circle" alt="" width="40">';
                 })
                 ->addColumn('action', function ($row) {
-                    $actionBtn = '<a href="' . route('devices.detail', $row->id) . '" class="btn btn-sm btn-info">Show</a> <a href="#modal-dialog" id="' . $row->id . '" class="btn btn-sm btn-success btn-edit" data-route="' . route('devices.update', $row->id) . '" data-bs-toggle="modal">Edit</a> <button type="button" data-route="' . route('devices.destroy', $row->id) . '" class="delete btn btn-danger btn-delete btn-sm">Delete</button>';
+                    $actionBtn = '<a href="' . route('devices.detail', $row->id) . '" class="btn btn-sm btn-info">Show</a> <a href="' . route('devices.grafik', $row->id) . '" class="btn btn-sm btn-warning">Grafik</a> <a href="#modal-dialog" id="' . $row->id . '" class="btn btn-sm btn-success btn-edit" data-route="' . route('devices.update', $row->id) . '" data-bs-toggle="modal">Edit</a> <button type="button" data-route="' . route('devices.destroy', $row->id) . '" class="delete btn btn-danger btn-delete btn-sm">Delete</button>';
                     return $actionBtn;
                 })
                 ->editColumn('company', function ($row) {
                     return $row->company->name;
                 })
                 ->editColumn('status', function ($row) {
-                    return $row->is_active == 1 ? 'Active' : 'Nonactive';
+                    if ($row->is_active == 1) {
+                        $checked = 'checked';
+                        $status = 'Active';
+                    } else {
+                        $checked = '';
+                        $status = 'Nonactive';
+                    }
+                    return '<div class="form-check form-switch">
+                    <input class="form-check-input device-active" type="checkbox" name="active" data-id="' . $row->id . '" ' . $checked . ' />
+                    <label class="form-check-label" for="' . $row->id . '"></label>
+                  </div>';
                 })
-                ->rawColumns(['action', 'image'])
+                ->rawColumns(['action', 'image', 'status'])
                 ->make(true);
         }
     }
@@ -201,10 +215,26 @@ class DeviceController extends Controller
 
     function detail(Device $device)
     {
-        $title = 'Detail Device ' . $device->name;
-        $breadcrumbs = ['Master', 'Detail Device ' . $device->name];
+        $title = 'Pump Performance Detail Device ';
+        $breadcrumbs = ['Master', 'Pump Performance Detail Device '];
 
-        return view('device.show', compact('title', 'breadcrumbs', 'device'));
+        $digital = DigitalInput::where('device_id', $device->id)->where('is_used', 1)->get();
+        $modbus = Modbus::where('device_id', $device->id)->where('is_used', 1)->get();
+        $history = History::where('device_id', $device->id)->groupBy('time')->limit(10)->latest()->get();
+
+        return view('device.show', compact('title', 'breadcrumbs', 'device', 'digital', 'modbus', 'history'));
+    }
+
+    function grafik(Device $device)
+    {
+        $title = 'Pump Performance Detail Device ';
+        $breadcrumbs = ['Master', 'Pump Performance Detail Device '];
+
+        $digital = DigitalInput::where('device_id', $device->id)->where('is_used', 1)->get();
+        $modbus = Modbus::where('device_id', $device->id)->where('is_used', 1)->get();
+        $history = History::where('device_id', $device->id)->groupBy('time')->limit(10)->latest()->get();
+
+        return view('device.detail', compact('title', 'breadcrumbs', 'device', 'digital', 'modbus', 'history'));
     }
 
     public function find(Device $device)
@@ -222,6 +252,68 @@ class DeviceController extends Controller
             'merge' => $merge,
             'image' => $image,
             'history' =>  0,
+        ]);
+    }
+
+    public function active()
+    {
+        try {
+            DB::beginTransaction();
+
+            $device = Device::find(request('id'));
+            $device->update([
+                'is_active' => request('active')
+            ]);
+
+            if (request('active') == 1) {
+                $message = 'Device successfully activated';
+            } else {
+                $message = 'Device successfully non activated';
+            }
+
+            DB::commit();
+
+            return response()->json([
+                'status' => 'success',
+                'message' => $message
+            ]);
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return response()->json([
+                'status' => 'error',
+                'message' => $th->getMessage()
+            ]);
+        }
+    }
+
+    function historyModbus(Device $device)
+    {
+        if (request('from') != '' && request('to') != '') {
+            $active = Modbus::where('device_id', $device->id)->where('is_showed', 1)->whereHas('histories', function ($q) {
+                $q->whereBetween('created_at', [request('from'), Carbon::parse(request('to'))->addDay(1)->format('Y-m-d')]);
+            })->with('histories', function ($q) {
+                $q->whereBetween('created_at', [request('from'), Carbon::parse(request('to'))->addDay(1)->format('Y-m-d')]);
+            })->latest()->get();
+        } else {
+            $count = Modbus::where('device_id', $device->id)->where('is_showed', 1)->count();
+            $total = $count * 10;
+
+            $active = Modbus::where('device_id', $device->id)->where('is_showed', 1)->with('histories', function ($q) use ($total) {
+                $q->latest()->limit($total);
+            })->whereHas('histories', function ($q) use ($total) {
+                $q->latest()->limit($total);
+            })->get();
+
+            $digital = DigitalInput::where('device_id', $device->id)->where('is_used', 1)->get();
+            $modbus = Modbus::where('device_id', $device->id)->where('is_used', 1)->get();
+            $history = History::where('device_id', $device->id)->groupBy('time')->limit(10)->latest()->get();
+        }
+
+        return response()->json([
+            'active' => $active,
+            'history' => $history,
+            'digital' => $digital,
+            'modbus' => $modbus,
         ]);
     }
 }

@@ -29,4 +29,9 @@ class Device extends Model
     {
         return $this->hasMany(Merge::class);
     }
+
+    function histories()
+    {
+        return $this->hasMany(History::class);
+    }
 }

@@ -8,6 +8,7 @@ use App\Http\Controllers\ModbusController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Symfony\Component\Process\Process;
 
 /*
 |--------------------------------------------------------------------------
@@ -34,4 +35,15 @@ Route::get('/devices/{device:id}', [DeviceController::class, 'find']);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
+});
+
+Route::get('restart', function () {
+    $command = 'mqtt:subs'; // Replace with your actual console command
+
+    // Execute the command as a new process
+    $command = 'php ' . base_path('artisan') . ' mqtt:subs > /dev/null 2>&1 &';
+    $process = Process::fromShellCommandline($command);
+    $process->run();
+
+    return response()->json(['message' => 'Command restarted.']);
 });
