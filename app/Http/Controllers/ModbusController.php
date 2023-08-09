@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\History;
 use App\Models\Merge;
 use App\Models\Modbus;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -24,9 +26,9 @@ class ModbusController extends Controller
         //
     }
 
-    public function show(Modbus $modbus)
+    public function show(Modbus $modbu)
     {
-        //
+        return response()->json(['modbus' => $modbu]);
     }
 
     public function edit(Modbus $modbus)
@@ -379,5 +381,29 @@ class ModbusController extends Controller
             'history' => $history,
             'request' => request()->all(),
         ]);
+    }
+
+    function setting(Request $request)
+    {
+        try {
+            DB::beginTransaction();
+
+            $modbus = Modbus::find($request->modbus);
+
+            $modbus->update([
+                'data_as' => $request->modbus_as ?? null,
+                'point_one' => $request->set_point_one ?? null,
+                'point_two' => $request->set_point_two ?? null,
+                'notif_one' => $request->push_notif_one ?? null,
+                'notif_two' => $request->push_notif_two ?? null,
+            ]);
+
+            DB::commit();
+
+            return back()->with('success', "Setting modbus success");
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return back()->with('error', $th->getMessage());
+        }
     }
 }

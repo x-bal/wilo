@@ -75,7 +75,7 @@
 
     <div class="panel-body">
         <div class="table-responsive">
-            <table id="datatable" class="table table-striped table-bordered align-middle">
+            <table id="datatable-modbus" class="table table-striped table-bordered align-middle">
                 <thead>
                     <tr>
                         <th>#</th>
@@ -87,8 +87,8 @@
                         <th colspan="2">Math</th>
                         <th>Val(After)</th>
                         <th>Unit</th>
-                        <th>Used</th>
-                        <th>Showed</th>
+                        <th>Action</th>
+                        <!-- <th>Showed</th> -->
                     </tr>
                 </thead>
                 <tbody>
@@ -132,15 +132,28 @@
                             <input type="text" name="satuan" data-id="{{ $modbus->id }}" class="form-control form-control-sm modbus-satuan" value="{{ $modbus->satuan }}">
                         </td>
                         <td>
-                            <div class="form-check form-switch">
-                                <input class="form-check-input modbus-used" data-id="{{ $modbus->id }}" type="checkbox" name="used" disabled {{ $modbus->is_used == 1 ? 'checked' : '' }}>
-                                <label class="form-check-label" for="used">Used</label>
-                            </div>
-                        </td>
-                        <td class="showed">
-                            <div class="form-check form-switch">
-                                <input class="form-check-input modbus-showed" data-id="{{ $modbus->id }}" type="checkbox" name="showed" {{ $modbus->is_showed == 1 ? 'checked' : '' }}>
-                                <label class="form-check-label" for="showed">Showed</label>
+                            <div class="btn-group">
+                                <a href="#" class="btn btn-default">Action</a>
+                                <a href="#" class="btn btn-default dropdown-toggle" data-bs-toggle="dropdown">
+                                    <i class="fa fa-caret-down"></i>
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end">
+                                    <li class="dropdown-item">
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input modbus-used" data-id="{{ $modbus->id }}" type="checkbox" name="used" disabled {{ $modbus->is_used == 1 ? 'checked' : '' }}>
+                                            <label class="form-check-label" for="used">Used</label>
+                                        </div>
+                                    </li>
+                                    <li class="dropdown-item">
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input modbus-showed" data-id="{{ $modbus->id }}" type="checkbox" name="showed" {{ $modbus->is_showed == 1 ? 'checked' : '' }}>
+                                            <label class="form-check-label" for="showed">Showed</label>
+                                        </div>
+                                    </li>
+                                    <li class="dropdown-item">
+                                        <a href="#modal-dialog" data-id="{{ $modbus->id }}" class="btn btn-outline-primary btn-setting" data-route="" data-bs-toggle="modal"><i class="fas fa-cog"></i> Setting</a>
+                                    </li>
+                                </ul>
                             </div>
                         </td>
                     </tr>
@@ -300,6 +313,61 @@
 
     </div>
 </div>
+
+<div class="modal fade" id="modal-dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Modbus Setting</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+            </div>
+            <form action="{{ route('modbus.setting') }}" method="post" id="form-modbus" enctype="multipart/form-data">
+                @csrf
+
+                <div class="modal-body">
+                    <input type="hidden" name="modbus" id="modbus-id" value="">
+
+                    <div class="form-group row mb-3">
+                        <div class="col-md-12 mb-3">
+                            <label for="select-as">Select As</label>
+                            <select name="modbus_as" id="modbus_as" class="form-control">
+                                <option disabled selected>-- Select As --</option>
+                                <option value="running">Running Data</option>
+                                <option value="trip">Trip Data</option>
+                                <option value="stop">Stop Data</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="set-point-one">Set Point 1</label>
+                            <input type="text" name="set_point_one" id="set-point-one" class="form-control" value="">
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="set-point-two">Set Point 2</label>
+                            <input type="text" name="set_point_two" id="set-point-two" class="form-control" value="">
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="push-notif-one">Push Notification 1</label>
+                            <textarea name="push_notif_one" id="push-notif-one" rows="3" class="form-control"></textarea>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="push-notif-two">Push Notification 1</label>
+                            <textarea name="push_notif_two" id="push-notif-two" rows="3" class="form-control"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <a href="javascript:;" id="btn-close" class="btn btn-white" data-bs-dismiss="modal">Close</a>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 @endsection
 
 @push('script')
@@ -457,5 +525,30 @@
     }
 
     window.initMap = initMap;
+</script>
+
+<script>
+    $(document).ready(function() {
+        $("#datatable-modbus").on('click', '.btn-setting', function() {
+            let id = $(this).attr("data-id");
+
+            $("#modbus-id").val(id);
+
+            $.ajax({
+                url: "/modbus/" + id,
+                method: "GET",
+                type: "GET",
+                success: function(response) {
+                    let modbus = response.modbus;
+
+                    $("#modbus_as").val(modbus.data_as)
+                    $("#set-point-one").val(modbus.point_one)
+                    $("#set-point-two").val(modbus.point_two)
+                    $("#push-notif-one").val(modbus.notif_one)
+                    $("#push-notif-two").val(modbus.notif_two)
+                }
+            })
+        })
+    })
 </script>
 @endpush

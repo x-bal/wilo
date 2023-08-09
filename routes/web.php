@@ -3,6 +3,7 @@
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DeviceController;
+use App\Http\Controllers\ModbusController;
 use App\Http\Controllers\ServerController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Auth;
@@ -41,5 +42,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/devices/{device:id}/performance', [DeviceController::class, 'grafik'])->name('devices.grafik');
     Route::resource('devices', DeviceController::class);
 
+    Route::post('/modbus-setting', [ModbusController::class, 'setting'])->name('modbus.setting');
+    Route::resource('modbus', ModbusController::class);
     Route::resource('server', ServerController::class);
 });
