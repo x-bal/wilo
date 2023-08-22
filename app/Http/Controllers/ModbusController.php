@@ -11,29 +11,9 @@ use Illuminate\Support\Facades\DB;
 
 class ModbusController extends Controller
 {
-    public function index()
-    {
-        //
-    }
-
-    public function create()
-    {
-        //
-    }
-
-    public function store(Request $request)
-    {
-        //
-    }
-
     public function show(Modbus $modbu)
     {
         return response()->json(['modbus' => $modbu]);
-    }
-
-    public function edit(Modbus $modbus)
-    {
-        //
     }
 
     public function update(Request $request)
@@ -392,8 +372,8 @@ class ModbusController extends Controller
 
             $modbus->update([
                 'data_as' => $request->modbus_as ?? null,
-                'point_one' => $request->set_point_one ?? null,
-                'point_two' => $request->set_point_two ?? null,
+                'point_one' => str_replace(' ', '', $request->set_point_one) ?? null,
+                'point_two' => str_replace(' ', '', $request->set_point_two) ?? null,
                 'notif_one' => $request->push_notif_one ?? null,
                 'notif_two' => $request->push_notif_two ?? null,
             ]);

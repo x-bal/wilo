@@ -3,6 +3,7 @@
 @push('style')
 <link href="{{ asset('/') }}plugins/datatables.net-bs4/css/dataTables.bootstrap4.min.css" rel="stylesheet" />
 <link href="{{ asset('/') }}plugins/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css" rel="stylesheet" />
+<link href="{{ asset('/') }}plugins/select2/dist/css/select2.min.css" rel="stylesheet" />
 @endpush
 
 @section('content')
@@ -27,16 +28,19 @@
     <!-- END panel-heading -->
     <!-- BEGIN panel-body -->
     <div class="panel-body">
-        <a href="#modal-dialog" id="btn-add" class="btn btn-primary mb-3" data-route="{{ route('companies.store') }}" data-bs-toggle="modal"><i class="ion-ios-add"></i> Add Company</a>
+        <a href="#modal-dialog" id="btn-add" class="btn btn-primary mb-3" data-route="{{ route('notifications.store') }}" data-bs-toggle="modal"><i class="ion-ios-add"></i> Add Notification</a>
 
         <table id="datatable" class="table table-striped table-bordered align-middle">
             <thead>
                 <tr>
                     <th class="text-nowrap">No</th>
-                    <th class="text-nowrap">Logo</th>
-                    <th class="text-nowrap">Name</th>
-                    <th class="text-nowrap">Address</th>
-                    <th class="text-nowrap">Total Device</th>
+                    <th class="text-nowrap">Device</th>
+                    <th class="text-nowrap">Phone</th>
+                    <th class="text-nowrap">Person Name</th>
+                    <th class="text-nowrap">Interval</th>
+                    <th class="text-nowrap">Trigger</th>
+                    <th class="text-nowrap">Schedule</th>
+                    <th class="text-nowrap">Custom Message</th>
                     <th class="text-nowrap">Action</th>
                 </tr>
             </thead>
@@ -49,36 +53,75 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Form User</h4>
+                <h4 class="modal-title">Form Notification</h4>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
             </div>
-            <form action="" method="post" id="form-user" enctype="multipart/form-data">
+            <form action="" method="post" id="form-notification" enctype="multipart/form-data">
                 @csrf
 
                 <div class="modal-body">
                     <div class="form-group mb-3">
-                        <label for="name">Nama</label>
-                        <input type="text" name="name" id="name" class="form-control" value="">
+                        <label for="device">Device</label>
+                        <select name="device" id="device" class="form-control">
+                            <option disabled selected>-- Select Device --</option>
+                            @foreach($devices as $device)
+                            <option value="{{ $device->id }}">{{ $device->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
 
-                        @error('name')
+                    <div class="form-group mb-3">
+                        <label for="phone">Phone Number</label>
+                        <input type="number" name="phone" id="phone" class="form-control" value="">
+
+                        @error('phone')
                         <small class="text-danger">{{ $message }}</small>
                         @enderror
                     </div>
 
                     <div class="form-group mb-3">
-                        <label for="address">Address</label>
-                        <textarea name="address" id="address" rows="3" class="form-control"></textarea>
+                        <label for="person_name">Person Name</label>
+                        <input type="text" name="person_name" id="person_name" class="form-control" value="">
 
-                        @error('address')
+                        @error('person_name')
                         <small class="text-danger">{{ $message }}</small>
                         @enderror
                     </div>
 
                     <div class="form-group mb-3">
-                        <label for="logo">Logo</label>
-                        <input type="file" name="logo" id="logo" class="form-control" value="">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" id="interval" name="interval" />
+                            <label class="form-check-label" for="interval">Interval</label>
 
-                        @error('logo')
+                            @error('interval')
+                            <small class="text-danger">{{ $message }}</small>
+                            @enderror
+                        </div>
+
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" id="trigger" name="trigger" />
+                            <label class="form-check-label" for="trigger">Trigger</label>
+
+                            @error('trigger')
+                            <small class="text-danger">{{ $message }}</small>
+                            @enderror
+                        </div>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="schedule_time">Schedule Time</label>
+                        <input type="time" name="schedule_time" id="schedule_time" class="form-control" value="">
+
+                        @error('schedule_time')
+                        <small class="text-danger">{{ $message }}</small>
+                        @enderror
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="custom_message">Custom Message</label>
+                        <textarea name="custom_message" id="custom_message" rows="4" class="form-control"></textarea>
+
+                        @error('custom_message')
                         <small class="text-danger">{{ $message }}</small>
                         @enderror
                     </div>
@@ -106,13 +149,19 @@
 <script src="{{ asset('/') }}plugins/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
 <script src="{{ asset('/') }}plugins/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js"></script>
 <script src="{{ asset('/') }}plugins/sweetalert/dist/sweetalert.min.js"></script>
+<script src="{{ asset('/') }}plugins/select2/dist/js/select2.min.js"></script>
 
 <script>
+    $("#permissions").select2({
+        dropdownParent: $('#modal-dialog'),
+        placeholder: "Select Permissions"
+    });
+
     var table = $('#datatable').DataTable({
         processing: true,
         serverSide: true,
         responsive: true,
-        ajax: "{{ route('companies.list') }}",
+        ajax: "{{ route('notifications.get') }}",
         deferRender: true,
         pagination: true,
         columns: [{
@@ -120,20 +169,32 @@
                 name: 'DT_RowIndex'
             },
             {
-                data: 'logo',
-                name: 'logo'
+                data: 'device_id',
+                name: 'device_id'
             },
             {
-                data: 'name',
-                name: 'name'
+                data: 'phone',
+                name: 'phone'
             },
             {
-                data: 'address',
-                name: 'address'
+                data: 'person_name',
+                name: 'person_name'
             },
             {
-                data: 'total',
-                name: 'total'
+                data: 'interval',
+                name: 'interval'
+            },
+            {
+                data: 'trigger',
+                name: 'trigger'
+            },
+            {
+                data: 'schedule_time',
+                name: 'schedule_time'
+            },
+            {
+                data: 'custom_message',
+                name: 'custom_message'
             },
             {
                 data: 'action',
@@ -144,32 +205,31 @@
 
     $("#btn-add").on('click', function() {
         let route = $(this).attr('data-route')
-        $("#form-user").append(`<input type="hidden" name="_method" value="POST">`);
-        $("#form-user").attr('action', route)
-        $("#address").val("")
+        $("#form-notification").append(`<input type="hidden" name="_method" value="POST">`);
+        $("#form-notification").attr('action', route)
         $("#name").val("")
     })
 
     $("#btn-close").on('click', function() {
-        $("#form-user").removeAttr('action')
+        $("#form-notification").removeAttr('action')
     })
 
     $("#datatable").on('click', '.btn-edit', function() {
         let route = $(this).attr('data-route')
         let id = $(this).attr('id')
 
-        $("#form-user").attr('action', route)
-        $("#form-user").append(`<input type="hidden" name="_method" value="PUT">`);
+        $("#form-notification").attr('action', route)
+        $("#form-notification").append(`<input type="hidden" name="_method" value="PUT">`);
 
         $.ajax({
-            url: "/companies/" + id,
+            url: "/roles/" + id,
             type: 'GET',
             method: 'GET',
             success: function(response) {
-                let company = response.company;
+                let role = response.role;
 
-                $("#address").val(company.address)
-                $("#name").val(company.name)
+                $("#name").val(role.name)
+                $("#permissions").val(response.permissions).trigger('change')
             }
         })
     })
@@ -180,8 +240,8 @@
         $("#form-delete").attr('action', route)
 
         swal({
-            title: 'Hapus data company?',
-            text: 'Menghapus company bersifat permanen.',
+            title: 'Hapus data role?',
+            text: 'Menghapus role bersifat permanen.',
             icon: 'error',
             buttons: {
                 cancel: {

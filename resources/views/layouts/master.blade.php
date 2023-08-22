@@ -154,6 +154,24 @@
                         </a>
                     </div>
 
+                    <div class="menu-item">
+                        <a href="{{ route('notifications.index') }}" class="menu-link">
+                            <div class="menu-icon">
+                                <i class="fas fa-cog bg-secondary"></i>
+                            </div>
+                            <div class="menu-text">Notification Setting</div>
+                        </a>
+                    </div>
+
+                    <div class="menu-item">
+                        <a href="{{ route('roles.index') }}" class="menu-link">
+                            <div class="menu-icon">
+                                <i class="fas fa-cog bg-secondary"></i>
+                            </div>
+                            <div class="menu-text">Role Management</div>
+                        </a>
+                    </div>
+
                     <div class="menu-item d-flex">
                         <a href="javascript:;" class="app-sidebar-minify-btn ms-auto" data-toggle="app-sidebar-minify"><i class="ion-ios-arrow-back"></i>
                             <div class="menu-text">Collapse</div>

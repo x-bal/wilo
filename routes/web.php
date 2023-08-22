@@ -4,6 +4,8 @@ use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DeviceController;
 use App\Http\Controllers\ModbusController;
+use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\RoleController;
 use App\Http\Controllers\ServerController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Auth;
@@ -43,6 +45,15 @@ Route::middleware('auth')->group(function () {
     Route::resource('devices', DeviceController::class);
 
     Route::post('/modbus-setting', [ModbusController::class, 'setting'])->name('modbus.setting');
+    Route::post('/modbus/merge', [ModbusController::class, 'merge'])->name('modbus.merge')->middleware('admin');
+    Route::post('/merge/{merge:id}', [ModbusController::class, 'deleteMerge'])->name('merge.delete')->middleware('admin');
     Route::resource('modbus', ModbusController::class);
+
+    Route::get('/roles/get', [RoleController::class, 'get'])->name('roles.get');
+    Route::resource('roles', RoleController::class);
+
     Route::resource('server', ServerController::class);
+
+    Route::get('/notifications/get', [NotificationController::class, 'get'])->name('notifications.get');
+    Route::resource('notifications', NotificationController::class);
 });

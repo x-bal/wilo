@@ -101,6 +101,11 @@
         </div>
     </div>
 </div>
+
+<form action="" class=" d-none" id="form-delete" method="post">
+    @csrf
+    @method('DELETE')
+</form>
 @endsection
 
 @push('script')
