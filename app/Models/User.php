@@ -19,4 +19,9 @@ class User extends Authenticatable
         'password',
         'foto',
     ];
+
+    function devices()
+    {
+        return $this->belongsToMany(Device::class);
+    }
 }

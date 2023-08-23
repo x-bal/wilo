@@ -155,6 +155,15 @@
                     </div>
 
                     <div class="menu-item">
+                        <a href="{{ route('access.index') }}" class="menu-link">
+                            <div class="menu-icon">
+                                <i class="fas fa-cog bg-secondary"></i>
+                            </div>
+                            <div class="menu-text">Access Viewer</div>
+                        </a>
+                    </div>
+
+                    <div class="menu-item">
                         <a href="{{ route('notifications.index') }}" class="menu-link">
                             <div class="menu-icon">
                                 <i class="fas fa-cog bg-secondary"></i>

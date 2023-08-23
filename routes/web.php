@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AccessViewerController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DeviceController;
@@ -53,6 +54,12 @@ Route::middleware('auth')->group(function () {
     Route::resource('roles', RoleController::class);
 
     Route::resource('server', ServerController::class);
+
+    Route::get('/access-viewer', [AccessViewerController::class, 'index'])->name('access.index');
+    Route::get('/access-viewer/list', [AccessViewerController::class, 'list'])->name('access.list');
+    Route::get('/access-viewer/{id}', [AccessViewerController::class, 'show'])->name('access.show');
+    Route::post('/access-viewer/store', [AccessViewerController::class, 'store'])->name('access.store');
+    Route::delete('/access-viewer/{id}', [AccessViewerController::class, 'destroy'])->name('access.destroy');
 
     Route::get('/notifications/get', [NotificationController::class, 'get'])->name('notifications.get');
     Route::resource('notifications', NotificationController::class);
