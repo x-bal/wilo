@@ -14,4 +14,9 @@ class Merge extends Model
     {
         return $this->belongsTo(Device::class);
     }
+
+    function modbuses()
+    {
+        return $this->hasMany(Modbus::class);
+    }
 }

@@ -105,7 +105,7 @@ class ModbusController extends Controller
 
                     $val = $this->endian($request->convert, $decOne, $decTwo);
 
-                    // dd($val);
+
                     $merge = Merge::create([
                         'device_id' => $modbusOne->device_id,
                         'name' => $request->name,
@@ -159,18 +159,18 @@ class ModbusController extends Controller
         $addOne = '';
         $addTwo = '';
 
-
         if ($diffOne > 0) {
-            for ($i = 1; $i < $diffOne; $i++) {
+            for ($i = 1; $i <= $diffOne; $i++) {
                 $addOne .= 0;
             }
         }
 
         if ($diffTwo > 0) {
-            for ($i = 1; $i < $diffTwo; $i++) {
+            for ($i = 1; $i <= $diffTwo; $i++) {
                 $addTwo .= 0;
             }
         }
+
 
         $decOne = $addOne . $decOne;
         $decTwo = $addTwo . $decTwo;

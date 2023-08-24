@@ -26,7 +26,7 @@ Route::get('/digital', [DigitalInputController::class, 'update']);
 Route::get('/get-history/{device:id}', [DeviceController::class, 'history']);
 Route::get('/get-history-modbus/{device:id}', [DeviceController::class, 'historyModbus']);
 Route::get('/device/active', [DeviceController::class, 'active']);
-Route::get('/math', [DeviceController::class, 'math']);
+Route::get('/math', [ModbusController::class, 'math']);
 Route::get('/merge/change', [ModbusController::class, 'change']);
 Route::get('/merge/math', [ModbusController::class, 'math']);
 Route::get('/merge', [ModbusController::class, 'updateMerge']);

@@ -139,7 +139,7 @@
         let route = $(this).attr('data-route')
         let id = $(this).attr('id')
 
-        // alert(route)
+
 
         $("#form-access").attr('action', route)
         // $("#form-access").append(`<input type="hidden" name="_method" value="PUT">`);

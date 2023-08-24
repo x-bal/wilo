@@ -328,7 +328,7 @@
             <div class="modal-body">
                 <form action="{{ route('modbus.merge') }}" method="post" class="form-merge">
                     @csrf
-                    <div class="form-group">
+                    <div class="form-group mb-3">
                         <label for="name">Merge Name</label>
                         <input type="text" name="name" id="name" class="form-control" value="{{ old('name') }}">
 

@@ -107,7 +107,7 @@
                     </div>
 
                     <div class="menu-header">Navigation</div>
-                    <div class="menu-item">
+                    <div class="menu-item {{ request()->is('dashboard') ? 'active' : '' }}">
                         <a href="{{ route('dashboard') }}" class="menu-link">
                             <div class="menu-icon">
                                 <i class="fas fa-home bg-blue"></i>
@@ -116,28 +116,28 @@
                         </a>
                     </div>
 
-                    <div class="menu-item has-sub active">
+                    <div class="menu-item has-sub {{ request()->is('users*') || request()->is('companies*') || request()->is('devices*') ? 'active' : '' }}">
                         <a href="javascript:;" class="menu-link">
                             <div class="menu-icon">
-                                <i class="ion-ios-pulse"></i>
+                                <i class="fas fa-folder-open bg-green"></i>
                             </div>
                             <div class="menu-text">Data Master</div>
                             <div class="menu-caret"></div>
                         </a>
                         <div class="menu-submenu">
-                            <div class="menu-item">
+                            <div class="menu-item {{ request()->is('users*') ? 'active' : '' }}">
                                 <a href="{{ route('users.index') }}" class="menu-link">
                                     <div class="menu-text">Data User</div>
                                 </a>
                             </div>
 
-                            <div class="menu-item">
+                            <div class="menu-item {{ request()->is('companies*') ? 'active' : '' }}">
                                 <a href="{{ route('companies.index') }}" class="menu-link">
                                     <div class="menu-text">Data Company</div>
                                 </a>
                             </div>
 
-                            <div class="menu-item">
+                            <div class="menu-item {{ request()->is('devices*') ? 'active' : '' }}">
                                 <a href="{{ route('devices.index') }}" class="menu-link">
                                     <div class="menu-text">Data Device</div>
                                 </a>
@@ -145,37 +145,37 @@
                         </div>
                     </div>
 
-                    <div class="menu-item">
+                    <div class="menu-item {{ request()->is('server*') ? 'active' : '' }}">
                         <a href="{{ route('server.index') }}" class="menu-link">
                             <div class="menu-icon">
-                                <i class="fas fa-cog bg-secondary"></i>
+                                <i class="fas fa-wifi bg-gradient-yellow-red"></i>
                             </div>
                             <div class="menu-text">Server</div>
                         </a>
                     </div>
 
-                    <div class="menu-item">
+                    <div class="menu-item {{ request()->is('access*') ? 'active' : '' }}">
                         <a href="{{ route('access.index') }}" class="menu-link">
                             <div class="menu-icon">
-                                <i class="fas fa-cog bg-secondary"></i>
+                                <i class="fas fa-cog bg-indigo"></i>
                             </div>
                             <div class="menu-text">Access Viewer</div>
                         </a>
                     </div>
 
-                    <div class="menu-item">
+                    <div class="menu-item {{ request()->is('notifications*') ? 'active' : '' }}">
                         <a href="{{ route('notifications.index') }}" class="menu-link">
                             <div class="menu-icon">
-                                <i class="fas fa-cog bg-secondary"></i>
+                                <i class="fas fa-bell bg-lime"></i>
                             </div>
                             <div class="menu-text">Notification Setting</div>
                         </a>
                     </div>
 
-                    <div class="menu-item">
+                    <div class="menu-item {{ request()->is('roles*') ? 'active' : '' }}">
                         <a href="{{ route('roles.index') }}" class="menu-link">
                             <div class="menu-icon">
-                                <i class="fas fa-cog bg-secondary"></i>
+                                <i class="fas fa-eye-slash bg-secondary"></i>
                             </div>
                             <div class="menu-text">Role Management</div>
                         </a>
