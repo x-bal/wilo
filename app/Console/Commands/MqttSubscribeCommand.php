@@ -74,7 +74,7 @@ class MqttSubscribeCommand extends Command
             });
         }
 
-        $mqtt->loop(true);
+        // $mqtt->loop(true);
     }
 
     function insertModbus($device, $valmodbus, $address, $idmodbus, $modbusUsed)
