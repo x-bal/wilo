@@ -1,0 +1,93 @@
+services:
+    laravel.test:
+        container_name: laravelwilo
+        build:
+            context: ./vendor/laravel/sail/runtimes/8.0
+            dockerfile: Dockerfile
+            args:
+                WWWGROUP: '${WWWGROUP}'
+        image: sail-8.0/app
+        extra_hosts:
+            - 'host.docker.internal:host-gateway'
+        ports:
+            - '81:80'
+            - '${VITE_PORT:-5173}:${VITE_PORT:-5173}'
+        environment:
+            WWWUSER: '${WWWUSER}'
+            LARAVEL_SAIL: 1
+            XDEBUG_MODE: '${SAIL_XDEBUG_MODE:-off}'
+            XDEBUG_CONFIG: '${SAIL_XDEBUG_CONFIG:-client_host=host.docker.internal}'
+            IGNITION_LOCAL_SITES_PATH: '${PWD}'
+        volumes:
+            - '.:/var/www/html'
+        networks:
+            - sail
+        depends_on:
+            - pgsql
+    pgsql:
+        container_name: pgsqlwilo
+        image: 'postgres:15'
+        ports:
+            - '${FORWARD_DB_PORT:-5432}:5432'
+        environment:
+            PGPASSWORD: '${DB_PASSWORD:-secret}'
+            POSTGRES_DB: '${DB_DATABASE}'
+            POSTGRES_USER: '${DB_USERNAME}'
+            POSTGRES_PASSWORD: '${DB_PASSWORD:-secret}'
+        volumes:
+            - 'sail-pgsql:/var/lib/postgresql/data'
+            - './vendor/laravel/sail/database/pgsql/create-testing-database.sql:/docker-entrypoint-initdb.d/10-create-testing-database.sql'
+        networks:
+            - sail
+        healthcheck:
+            test:
+                - CMD
+                - pg_isready
+                - '-q'
+                - '-d'
+                - '${DB_DATABASE}'
+                - '-U'
+                - '${DB_USERNAME}'
+            retries: 3
+            timeout: 5s
+    pgadmin:
+        container_name: pgadmin4wilo
+        image: dpage/pgadmin4
+        restart: unless-stopped
+        ports:
+          - "3001:80"
+        environment:
+          - POSTGRES_HOST_AUTH_METHOD=trust
+          - PGADMIN_DEFAULT_EMAIL=wilo@local.host
+          - PGADMIN_DEFAULT_PASSWORD=pass123qwe
+        hostname: pgadmin
+        networks:
+          - sail
+        volumes:
+          - pgadmin-data:/var/lib/pgadmin
+    mosquitto:
+        container_name: mosquittowilo
+        image: eclipse-mosquitto
+        restart: always
+        ports:
+            - '1884:1883'  
+            - '9002:9001'
+        volumes:
+            - mosquitto-data:/mosquitto/data
+            - mosquitto-log:/mosquitto/log
+            - ./mosquitto.conf:/mosquitto/config/mosquitto.conf
+        networks:
+            - sail
+networks:
+    sail:
+        driver: bridge
+volumes:
+    sail-pgsql:
+        driver: local
+    pgadmin-data:
+    mosquitto-data:
+        driver: local
+    mosquitto-log:
+        driver: local
+    mosquitto-conf:
+        driver: local
